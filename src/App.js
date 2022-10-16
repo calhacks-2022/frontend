@@ -108,7 +108,7 @@ function App() {
   const [resultList, setResultList] = useState([]);
   const [isQueryLoading, setIsQueryLoading] = useState(false);
   const [cameraDistance, setCameraDistance] = useState(500);
-  const [showLandingPage, setShowLandingPage] = useState(false);
+  const [showLandingPage, setShowLandingPage] = useState(true);
 
   // const testAPI = async (queryP) => {
   //   const config = {

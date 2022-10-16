@@ -17,12 +17,11 @@ const DragAndDrop = ({ isDragging }) => {
             display: "flex",
             flexDirection: "column",
           }}
-        >
-        </div>
+        ></div>
       ) : (
         <div
           style={{
-            backgroundColor: "#2d2d2d",
+            backgroundColor: "#5E4AE3",
             width: "50vw",
             height: "20vh",
             top: 0,
@@ -36,7 +35,14 @@ const DragAndDrop = ({ isDragging }) => {
             flexDirection: "column",
           }}
         >
-          <p style={{ margin: "0", fontSize: "20px", color: "#f0f5ff" }}>
+          <p
+            style={{
+              margin: "0",
+              fontSize: "20px",
+              color: "#f0f5ff",
+              fontWeight: 600,
+            }}
+          >
             Drag and drop your package.json file here!
           </p>
         </div>

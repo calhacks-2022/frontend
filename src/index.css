@@ -14,25 +14,25 @@ code {
 
 input::-webkit-input-placeholder {
   /* WebKit browsers */
-  color: #fff;
+  color: #ffffffb3;
   font-weight: 800;
   font-size: 20px;
 }
 input:-moz-placeholder {
   /* Mozilla Firefox 4 to 18 */
-  color: #fff;
+  color: #ffffffb3;
   font-weight: 800;
   font-size: 20px;
 }
 input::-moz-placeholder {
   /* Mozilla Firefox 19+ */
-  color: #fff;
+  color: #ffffffb3;
   font-weight: 800;
   font-size: 20px;
 }
 input:-ms-input-placeholder {
   /* Internet Explorer 10+ */
-  color: #fff;
+  color: #ffffffb3;
   font-weight: 800;
   font-size: 20px;
 }

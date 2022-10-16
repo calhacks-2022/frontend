@@ -1,4 +1,5 @@
 import logo from "./logo.svg";
+import logo_png from "./logo.png";
 import "./App.css";
 import { useRef, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
@@ -294,6 +295,28 @@ function App() {
         alignItems: "center",
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          top: "15vh",
+          left: "50vw",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          opacity: isQueryLoading ? 0 : 1,
+        }}
+      >
+        <img
+          src={logo_png}
+          alt="logo"
+          style={{
+            width: "250px",
+            height: "250px",
+          }}
+        />
+      </div>
       {!fileContents && (
         <div
           style={{
@@ -317,9 +340,7 @@ function App() {
               flexDirection: "row",
               justifyContent: "space-between",
               height: "15%",
-              paddingLeft: "20px",
-              paddingRight: "20px",
-              marginTop: "30px",
+              marginTop: "4px",
             }}
           >
             <div
@@ -327,34 +348,40 @@ function App() {
                 handleValidateAndSetFileText(react_project_1, "package.json")
               }
               style={{
-                backgroundColor: "#F26CA7",
-                width: "40%",
+                backgroundColor: "#ccccffff",
+                width: "50%",
+                marginRight: "2px",
                 height: "100%",
-                borderRadius: "14px",
+                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                display: "flex",
-                fontWeight: 600,
+                cursor: "pointer",
+                borderBottomLeftRadius: "10px",
+                fontWeight: "bold",
+                color: "#2d2d2d",
               }}
             >
-              React Project 1
+              Sample 1
             </div>
             <div
               onClick={() =>
                 handleValidateAndSetFileText(react_project_1, "package.json")
               }
               style={{
-                backgroundColor: "#F26CA7",
-                width: "40%",
+                backgroundColor: "#ccccffff",
+                width: "50%",
+                marginLeft: "2px",
                 height: "100%",
-                borderRadius: "14px",
+                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                display: "flex",
-                fontWeight: 600,
+                cursor: "pointer",
+                borderBottomRightRadius: "10px",
+                fontWeight: "bold",
+                color: "#2d2d2d",
               }}
             >
-              React Project 2
+              Sample 2
             </div>
           </div>
         </div>
@@ -368,34 +395,23 @@ function App() {
         <ForceGraph graphData={graphData} />
         {graphData.nodes.length > 0 && (
           <>
-            <p
-              style={{
-                color: "white",
-                fontWeight: 800,
-                position: "absolute",
-                top: 50,
-                left: 20,
-                fontSize: "20px",
-              }}
-            >
-              {fileTitle}
-            </p>
             <div
               style={{
                 position: "absolute",
                 top: 0,
                 left: 20,
-                width: "180px",
-                height: "35px",
+                width: "240px",
+                height: "40px",
                 backgroundColor: "#FF6B6C",
                 marginTop: "20px",
-                borderRadius: "10px",
+                borderRadius: "5px",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
                 fontWeight: 800,
                 cursor: "pointer",
+                fontSize: "20px",
               }}
               onClick={() => {
                 setFileContents(null);
@@ -403,7 +419,9 @@ function App() {
                 setGraphData({ nodes: [], links: [] });
               }}
             >
-              Remove file
+              <div style={{color: "#2d2d2d", marginRight: "6px", }}>
+                Clear
+              </div><div style={{color: 'white'}}>{fileTitle}</div>
             </div>
             <div
               style={{
@@ -420,22 +438,22 @@ function App() {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  justifyContent: "space-between",
                   alignItems: "center",
                   marginTop: "50px",
                 }}
               >
                 <input
                   type="text"
-                  placeholder="I want a library to . . ."
+                  placeholder="I want a library to..."
                   style={{
-                    backgroundColor: "#05299E",
-                    width: "70%",
+                    backgroundColor: "#2d2d2d",
+                    width: "80%",
                     height: "60px",
                     color: "white",
                     fontSize: "20px",
                     paddingLeft: "20px",
-                    borderRadius: "20px",
+                    borderTopLeftRadius: "10px",
+                    borderBottomLeftRadius: "10px",
                     borderColor: "transparent",
                   }}
                   onChange={(event) => {
@@ -449,17 +467,18 @@ function App() {
                 />
                 <div
                   style={{
-                    width: "20%",
+                    width: "10%",
                     height: "60px",
                     backgroundColor: "#FDB833",
-                    borderRadius: "20px",
+                    borderTopRightRadius: "10px",
+                    borderBottomRightRadius: "10px",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
                     fontWeight: 800,
                     fontSize: "20px",
-                    color: "black",
+                    color: "2d2d2d",
                     marginRight: "40px",
                     cursor: "pointer",
                   }}
@@ -492,7 +511,7 @@ function App() {
               {resultList && (
                 <div
                   style={{
-                    width: "90%",
+                    width: "100%",
                     // backgroundColor: "red",
                     display: "flex",
                     flexDirection: "column",

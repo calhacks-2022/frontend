@@ -276,37 +276,29 @@ function App() {
         alignItems: "center",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          top: "15vh",
-          left: "50vw",
-          transform: "translate(-50%, -50%)",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          opacity: isQueryLoading ? 0 : 1,
-        }}
-      >
-        <img
-          src={logo_png}
-          alt="logo"
-          style={{
-            width: "250px",
-            height: "250px",
-          }}
-        />
-      </div>
       {!fileContents && (
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "40%",
+            height: "80%",
             justifySelf: "center",
+            justifyContent: "center",
           }}
         >
+          {!isQueryLoading && (
+            <img
+              src={logo_png}
+              alt="logo"
+              style={{
+                width: "200px",
+                height: "200px",
+                alignSelf: "center",
+                marginBottom: "50px",
+              }}
+            />
+          )}
+
           <FileUploader
             multiple={true}
             handleChange={handleChange}
@@ -320,7 +312,7 @@ function App() {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              height: "15%",
+              height: "60px",
               marginTop: "4px",
             }}
           >
@@ -381,8 +373,9 @@ function App() {
                 position: "absolute",
                 top: 0,
                 left: 20,
-                width: "240px",
+                width: "auto",
                 height: "40px",
+                padding: "0px 20px",
                 backgroundColor: "#FF6B6C",
                 marginTop: "20px",
                 borderRadius: "5px",
@@ -400,9 +393,8 @@ function App() {
                 setGraphData({ nodes: [], links: [] });
               }}
             >
-              <div style={{color: "#2d2d2d", marginRight: "6px", }}>
-                Clear
-              </div><div style={{color: '#ccccff'}}>{fileTitle}</div>
+              <div style={{ color: "#2d2d2d", marginRight: "6px" }}>Clear</div>
+              <div style={{ color: "#ccccff" }}>{fileTitle}</div>
             </div>
             <div
               style={{
@@ -429,7 +421,7 @@ function App() {
                   style={{
                     backgroundColor: "#2d2d2d",
                     width: "80%",
-                    height: "60px",
+                    height: "40px",
                     color: "white",
                     fontSize: "20px",
                     paddingLeft: "20px",
@@ -449,10 +441,12 @@ function App() {
                 <div
                   style={{
                     width: "10%",
-                    height: "60px",
+                    height: "40px",
                     backgroundColor: "#FDB833",
                     borderTopRightRadius: "10px",
                     borderBottomRightRadius: "10px",
+                    borderStyle: "solid",
+                    borderColor: "#FDB833",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "center",

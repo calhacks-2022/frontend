@@ -1,6 +1,6 @@
 const ResultItem = ({ name, setSelected, selected }) => {
   const handleSelect = () => {
-    setSelected(selected === name ? null : name);
+    setSelected(name);
   };
   return (
     <div

@@ -4,8 +4,8 @@ const DragAndDrop = ({ isDragging }) => {
       {isDragging ? (
         <div
           style={{
-            backgroundColor: "#FDB833",
-            opacity: 0.8,
+            backgroundColor: "#0FFF50",
+            opacity: 1,
             width: "100vw",
             height: "100vh",
             position: "fixed",
@@ -15,6 +15,7 @@ const DragAndDrop = ({ isDragging }) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            fontSize: "30px",
           }}
         >
           Drop file here
@@ -36,7 +37,7 @@ const DragAndDrop = ({ isDragging }) => {
           }}
         >
           <p style={{ margin: "0", fontSize: "20px", fontWeight: 800 }}>
-            Drag and drop your file here!
+            Drag and drop your package.json file here!
           </p>
         </div>
       )}

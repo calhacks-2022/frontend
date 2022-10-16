@@ -44,6 +44,49 @@ const react_project_1 = JSON.stringify({
   },
 });
 
+const react_project_2 = JSON.stringify({
+  name: "example-web",
+  version: "0.1.0",
+  private: true,
+  dependencies: {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.9.3",
+    "@paypal/react-paypal-js": "^7.8.1",
+    axios: "^0.27.2",
+    "material-ui-phone-number": "^3.0.0",
+    "neumorphism-react": "^1.1.1",
+    react: "^18.2.0",
+    "react-auth-code-input": "^3.2.1",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^6.3.0",
+    "react-script": "^2.0.5",
+    "react-scripts": "^5.0.1",
+    "typeface-roboto": "^1.1.13",
+    "ui-neumorphism": "^1.1.3",
+    "universal-cookie": "^4.0.4",
+    "web-vitals": "^2.1.4",
+  },
+  scripts: {
+    start: "react-scripts start",
+    build: "react-scripts build",
+    test: "react-scripts test",
+    eject: "react-scripts eject",
+  },
+  eslintConfig: {
+    extends: ["react-app", "react-app/jest"],
+  },
+  browserslist: {
+    production: [">0.2%", "not dead", "not op_mini all"],
+    development: [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+    ],
+  },
+});
+
 function App() {
   // const [uploadedFiles, setUploadedFiles] = useState(null);
   const [fileContents, setFileContents] = useState(null);
@@ -51,15 +94,29 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const [packageCorrelations, setPackageCorrelations] = useState(null);
   const [packageNames, setPackageNames] = useState(null);
+  const [dependencies, setDependencies] = useState([]);
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const [queryPhrase, setQueryPhrase] = useState("");
   const [selectedResult, setSelectedResult] = useState(null);
   const [resultList, setResultList] = useState([]);
   const [isQueryLoading, setIsQueryLoading] = useState(false);
+  const [cameraDistance, setCameraDistance] = useState(500);
 
   const handleChange = async (files) => {
     const fileText = await files[0].text();
     handleValidateAndSetFileText(fileText, files[0].name);
+  };
+
+  const handleSetSelectedResult = async (newSelectedResult) => {
+    const unselect = selectedResult === newSelectedResult;
+    setSelectedResult(unselect ? null : newSelectedResult);
+    if (unselect) {
+      await handleGenerateGraph(dependencies); //TODO
+    } else {
+      const temp = JSON.parse(JSON.stringify(dependencies));
+      temp.push(newSelectedResult);
+      await handleGenerateGraph(temp, newSelectedResult); //TODO
+    }
   };
 
   const handleValidateAndSetFileText = async (fileText, fileName) => {
@@ -73,18 +130,10 @@ function App() {
         //TODO: HANDLE ERROR
         return;
       }
-      const dependencies = Object.keys(parsedFile.dependencies);
-
-      const config = {
-        method: "POST",
-        url: "https://jpbcmpeprl.execute-api.us-west-1.amazonaws.com/Prod/packages/correlation",
-        data: JSON.stringify({ packages: dependencies }),
-      };
-      try {
-        const response = await axios(config);
-        console.log(response.data);
-      } catch (error) {
-        console.log(error);
+      const deps = Object.keys(parsedFile.dependencies);
+      setDependencies(deps);
+      if (!(await handleGenerateGraph(deps))) {
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -92,162 +141,66 @@ function App() {
     }
     setFileContents(fileText);
     setFileTitle(fileName);
+  };
 
-    //TODO: MAKE API REQUEST TO RETRIEVE FOLLOWING DATA
-    const packages = [];
-    for (let i = 0; i < 10; i++) {
-      packages.push("Package_" + i.toString());
+  const handleGenerateGraph = async (dependencies, testAddition = "") => {
+    let covariance, packages;
+    const config = {
+      method: "POST",
+      url: "https://jpbcmpeprl.execute-api.us-west-1.amazonaws.com/Prod/packages/correlation",
+      data: JSON.stringify({ packages: dependencies }),
+    };
+    try {
+      const response = await axios(config);
+      packages = response.data.names;
+      covariance = response.data.covariance;
+    } catch (error) {
+      console.log(error);
     }
 
-    const correlations = [
-      [
-        [0.64, 1],
-        [1, 1],
-        [0.2, 1],
-        [0.06, 1],
-        [0.04, 1],
-        [0.28, 1],
-        [0.28, 1],
-        [0.23, 1],
-        [0.22, 1],
-        [0.27, 1],
-      ],
-      [
-        [0.09, 1],
-        [0.02, 1],
-        [0.17, 1],
-        [0.23, 1],
-        [0.51, 1],
-        [0.46, 1],
-        [0.85, 1],
-        [0.86, 1],
-        [0.81, 1],
-        [0.74, 1],
-      ],
-      [
-        [0.03, 1],
-        [0.9, 1],
-        [0.46, 1],
-        [0.59, 1],
-        [0.86, 1],
-        [0.87, 1],
-        [0.86, 1],
-        [0.46, 1],
-        [0.38, 1],
-        [0.77, 1],
-      ],
-      [
-        [0.32, 1],
-        [0.34, 1],
-        [0.03, 1],
-        [0.44, 1],
-        [0.99, 1],
-        [0.21, 1],
-        [0.65, 1],
-        [0.99, 1],
-        [0.22, 1],
-        [0, 1],
-      ],
-      [
-        [0.29, 1],
-        [0.02, 1],
-        [0.39, 1],
-        [0.73, 1],
-        [0.72, 1],
-        [0.84, 1],
-        [0.35, 1],
-        [0.71, 1],
-        [0.48, 1],
-        [0.68, 1],
-      ],
-      [
-        [0.24, 1],
-        [0.52, 1],
-        [0.38, 1],
-        [0.2, 1],
-        [0.79, 1],
-        [0.17, 1],
-        [0.56, 1],
-        [0.48, 1],
-        [0.79, 1],
-        [0.57, 1],
-      ],
-      [
-        [0.06, 1],
-        [0.16, 1],
-        [0.57, 1],
-        [0.91, 1],
-        [0.73, 1],
-        [0.48, 1],
-        [0.8, 1],
-        [0.84, 1],
-        [0.08, 1],
-        [0.57, 1],
-      ],
-      [
-        [0.24, 1],
-        [0.2, 1],
-        [0.66, 1],
-        [0.55, 1],
-        [0.18, 1],
-        [0.17, 1],
-        [0.63, 1],
-        [0.04, 1],
-        [0.83, 1],
-        [1, 1],
-      ],
-      [
-        [0.65, 1],
-        [0.08, 1],
-        [0.53, 1],
-        [0.92, 1],
-        [0.59, 1],
-        [0.04, 1],
-        [0.22, 1],
-        [0.96, 1],
-        [0.97, 1],
-        [0.98, 1],
-      ],
-      [
-        [0.06, 1],
-        [0.62, 1],
-        [0.83, 1],
-        [0.65, 1],
-        [0.67, 1],
-        [0.08, 1],
-        [0.5, 1],
-        [0.51, 1],
-        [0.61, 1],
-        [0.93, 1],
-      ],
-    ];
-
-    const maxDistance = 500;
-    const minCorrelation = 0.5;
+    if (!packages || !covariance) return false;
+    let largestDist = 0;
+    const maxDistance = 400;
+    const minCovariance = 0;
     const links = [];
     const nodes = [];
     for (let i = 0; i < packages.length; i++) {
-      nodes.push({ id: packages[i], group: 1, color: "white" });
+      nodes.push({
+        id: packages[i],
+        group: 1,
+        color: packages[i] === testAddition ? "red" : "white",
+      });
       const source = packages[i];
       for (let j = i + 1; j < packages.length; j++) {
         if (i === j) continue;
-        const correlation = Math.max(
-          correlations[i][j][0],
-          correlations[j][i][0]
+        const singleCov = Math.min(
+          1,
+          Math.max(covariance[i][j], covariance[j][i]) * 20
         );
-        if (correlation < minCorrelation) continue;
+        console.log(singleCov);
+        if (singleCov < minCovariance || isNaN(singleCov)) continue;
         const target = packages[j];
+        const distCalc = Math.pow(maxDistance - singleCov * maxDistance, 0.9);
+        largestDist = Math.max(largestDist, distCalc);
         links.push({
           source,
           target,
-          distance: maxDistance - correlation * maxDistance,
+          distance: distCalc,
         });
       }
     }
+
+    if (largestDist > 200) {
+      setCameraDistance(550);
+    } else {
+      setCameraDistance(400);
+    }
+
     setGraphData({
       nodes: JSON.parse(JSON.stringify(nodes)),
       links: JSON.parse(JSON.stringify(links)),
     });
+    return true;
   };
 
   const handleDraggingChange = (event) => {
@@ -257,6 +210,7 @@ function App() {
 
   const handleMakeLayerOneRequest = async () => {
     if (queryPhrase.length <= 0) return;
+    let plausible;
     setResultList([]);
     setIsQueryLoading(true);
     const config = {
@@ -266,6 +220,7 @@ function App() {
     };
     try {
       const response = await axios(config);
+      plausible = response.data.data;
       console.log(response.data.data);
       setResultList(
         response.data.data.map((item) => {
@@ -276,8 +231,34 @@ function App() {
       );
     } catch (error) {
       console.log(error);
+      return;
     }
     setIsQueryLoading(false);
+
+    //TODO: Update loading status to layer 2 loading
+    if (!plausible) {
+      console.log("Err Missing plausible output");
+      return;
+    }
+    const configLayerTwo = {
+      method: "POST",
+      url: "https://jpbcmpeprl.execute-api.us-west-1.amazonaws.com/Prod/layer/two",
+      data: JSON.stringify({ packages: dependencies, plausible }),
+    };
+    try {
+      const response = await axios(configLayerTwo);
+      console.log(response.data.data);
+      setResultList(
+        response.data.data.map((item) => {
+          return {
+            name: item[0],
+          };
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   };
 
   console.log(selectedResult);
@@ -341,7 +322,7 @@ function App() {
             </div>
             <div
               onClick={() =>
-                handleValidateAndSetFileText(react_project_1, "package.json")
+                handleValidateAndSetFileText(react_project_2, "package.json")
               }
               style={{
                 backgroundColor: "#F26CA7",
@@ -365,7 +346,7 @@ function App() {
           flexDirection: "row",
         }}
       >
-        <ForceGraph graphData={graphData} />
+        <ForceGraph graphData={graphData} cameraDistance={cameraDistance} />
         {graphData.nodes.length > 0 && (
           <>
             <p
@@ -504,7 +485,7 @@ function App() {
                   {resultList.map((item) => (
                     <ResultItem
                       name={item.name}
-                      setSelected={setSelectedResult}
+                      setSelected={handleSetSelectedResult}
                       selected={selectedResult}
                       key={item.name}
                     />

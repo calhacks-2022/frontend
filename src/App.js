@@ -169,7 +169,7 @@ function App() {
       nodes.push({
         id: packages[i],
         group: 1,
-        color: packages[i] === testAddition ? "red" : "white",
+        color: packages[i] === testAddition ? "#FDB833" : "white",
       });
       const source = packages[i];
       for (let j = i + 1; j < packages.length; j++) {
@@ -402,7 +402,7 @@ function App() {
             >
               <div style={{color: "#2d2d2d", marginRight: "6px", }}>
                 Clear
-              </div><div style={{color: 'white'}}>{fileTitle}</div>
+              </div><div style={{color: '#ccccff'}}>{fileTitle}</div>
             </div>
             <div
               style={{

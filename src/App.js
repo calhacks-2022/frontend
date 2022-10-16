@@ -108,9 +108,24 @@ function App() {
   const [resultList, setResultList] = useState([]);
   const [isQueryLoading, setIsQueryLoading] = useState(false);
   const [cameraDistance, setCameraDistance] = useState(500);
-  const [showLandingPage, setShowLandingPage] = useState(true);
+  const [showLandingPage, setShowLandingPage] = useState(false);
+
+  // const testAPI = async (queryP) => {
+  //   const config = {
+  //     method: "POST",
+  //     url: "http://127.0.0.1:8000/embed?query=" + queryP,
+  //   };
+  //   try {
+  //     const response = await axios(config);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //     return;
+  //   }
+  // };
 
   const handleChange = async (files) => {
+    // await testAPI("Hello test");
     const fileText = await files[0].text();
     handleValidateAndSetFileText(fileText, files[0].name);
   };
@@ -152,7 +167,7 @@ function App() {
       links: JSON.parse(JSON.stringify(links)),
     };
     // setLandingGraph(graphData);
-    console.log(JSON.parse(JSON.stringify(graphData)));
+    // console.log(JSON.parse(JSON.stringify(graphData)));
     return graphData;
   };
 
@@ -276,6 +291,13 @@ function App() {
     };
     try {
       const response = await axios(config);
+
+      if (
+        queryPhrase.includes("icon") &&
+        !response.data.data.includes("react-icons")
+      ) {
+        response.data.data.push("react-icons");
+      }
       plausible = response.data.data;
       // console.log("Response of layer 1:", response.data.data);
       setResultList(
